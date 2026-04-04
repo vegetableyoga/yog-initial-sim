@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Add Initials Simulator | YOG MAT</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+    
+    <link rel="icon" href="icon.png" type="image/png">
+    <link rel="apple-touch-icon" href="icon.png">
+
     <style>
         :root { --mat-b: #1a1a1a; --w: min(400px, 85vw); --h: calc(var(--w) * 0.55); }
         * { -webkit-tap-highlight-color: transparent; outline: none; box-sizing: border-box; }
@@ -16,7 +20,7 @@
         .thumb-container { position: relative; display: flex; justify-content: center; align-items: center; width: 160px; }
         .thumb { width: 40px; height: 160px; background: var(--mat-b); border: 1px solid #eee; position: relative; }
         
-        /* 1) 200cmの表記を中央に配置 */
+        /* 200cmラベルの中央配置 */
         .label-200 { position: absolute; right: calc(50% + 30px); top: 50%; transform: translateY(-50%); white-space: nowrap; }
         
         .label-50 { margin-top: 8px; }
@@ -44,6 +48,7 @@
         .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding-top: 10px; }
         .dot-item { text-align: center; cursor: pointer; }
         .dot { width: 100%; aspect-ratio: 1; border-radius: 50%; border: 1px solid transparent; transition: 0.2s; }
+        /* 選択カラーの拡大（1.4倍） */
         .dot-item.active .dot { border-color: #000; transform: scale(1.4); }
         .name { font-size: 8px; margin-top: 10px; color: #ccc; }
 
@@ -102,6 +107,7 @@
             }
             colors.forEach((c, i) => {
                 const el = document.createElement('div');
+                /* デフォルト選択をレモンイエローに設定 */
                 el.className = 'dot-item' + (i === 1 ? ' active' : '');
                 el.innerHTML = `<div class="dot" style="background:${c.h}; border-color:${c.h==='#FFFFFF'?'#ddd':'transparent'}"></div><div class="name">${c.n}</div>`;
                 el.onclick = function() {
@@ -114,7 +120,8 @@
                 input.value = input.value.replace(/[^a-zA-Z]/g, '').toUpperCase().slice(0, 3);
                 tf.textContent = input.value; tb.textContent = input.value;
             };
-            updateColor(colors[1]); // レモンイエロー初期化
+            /* レモンイエロー初期化 */
+            updateColor(colors[1]);
         });
     </script>
 </body>
