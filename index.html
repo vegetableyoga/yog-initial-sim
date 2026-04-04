@@ -13,10 +13,14 @@
         h1 { font-weight: 200; letter-spacing: 5px; margin: 20px 0 15px; font-size: 1.3rem; text-align: center; }
 
         .mini { display: flex; flex-direction: column; align-items: center; margin-bottom: 20px; font-size: 10px; color: #aaa; font-weight: bold; width: 100%; }
-        .thumb-outer { position: relative; width: 40px; height: 160px; }
-        .thumb { width: 100%; height: 100%; background: var(--mat-b); border: 1px solid #eee; position: relative; }
-        .label-200 { position: absolute; right: 50px; top: 0; white-space: nowrap; }
-        .indicator { position: absolute; bottom: 0; left: 0; width: 100%; height: 15%; border: 2px solid #ff4444; }
+        .thumb-container { position: relative; display: flex; justify-content: center; align-items: center; width: 160px; }
+        .thumb { width: 40px; height: 160px; background: var(--mat-b); border: 1px solid #eee; position: relative; }
+        
+        /* 1) 200cmの表記を中央に配置 */
+        .label-200 { position: absolute; right: calc(50% + 30px); top: 50%; transform: translateY(-50%); white-space: nowrap; }
+        
+        .label-50 { margin-top: 8px; }
+        .indicator { position: absolute; bottom: 0; left: 0; width: 100%; height: 15%; border: 2px solid #ff4444; box-sizing: border-box; }
 
         .mat-area { display: flex; flex-direction: column; align-items: center; width: 100%; }
         #mat { width: var(--w); height: var(--h); perspective: 2000px; cursor: pointer; }
@@ -29,9 +33,10 @@
         .logo-box { position: absolute; right: 5.6%; bottom: 10.6%; display: flex; align-items: flex-end; z-index: 10; }
         .logo-bro { width: calc(var(--w) * 0.0722); }
         .logo-yog { width: calc(var(--w) * 0.14); }
-        img { width: 100%; height: auto; display: block; }
+        img { width: 100%; height: auto; display: block; pointer-events: none; }
         .black-inv { filter: invert(1); }
 
+        .hint { margin-top: 8px; font-size: 13px; font-weight: bold; color: #999; letter-spacing: 1px; }
         .controls { width: 100%; padding: 15px 0; }
         label { display: block; font-size: 10px; font-weight: bold; margin-bottom: 5px; color: #aaa; letter-spacing: 2px; }
         input { width: 100%; padding: 12px; font-size: 24px; font-family: 'Montserrat'; border: 2px solid #eee; text-align: center; border-radius: 4px; margin-bottom: 15px; outline: none; text-transform: uppercase; box-sizing: border-box; }
@@ -39,7 +44,6 @@
         .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding-top: 10px; }
         .dot-item { text-align: center; cursor: pointer; }
         .dot { width: 100%; aspect-ratio: 1; border-radius: 50%; border: 1px solid transparent; transition: 0.2s; }
-        /* 1) 選択したカラーを大きく目立たせる（1.4倍） */
         .dot-item.active .dot { border-color: #000; transform: scale(1.4); }
         .name { font-size: 8px; margin-top: 10px; color: #ccc; }
 
@@ -49,22 +53,34 @@
 <body>
     <div class="master-wrapper">
         <h1>ADD INITIALS Simulator</h1>
-        <div class="mini"><div class="thumb-outer"><span class="label-200">200cm</span><div class="thumb"><div class="indicator"></div></div></div><span class="label-50">50cm</span></div>
+        <div class="mini">
+            <div class="thumb-container">
+                <span class="label-200">200cm</span>
+                <div class="thumb"><div class="indicator"></div></div>
+            </div>
+            <span class="label-50">50cm</span>
+        </div>
         <div class="mat-area">
             <div id="mat" onclick="this.classList.toggle('flipped')">
                 <div id="card">
-                    <div class="face front" id="face-front">
+                    <div class="face front">
                         <div class="initials" id="txt-front">VEG</div>
                         <div class="logo-box logo-bro"><img src="bro_logo_white.png" id="img-bro" alt="bro"></div>
                     </div>
-                    <div class="face back" id="face-back">
+                    <div class="face back">
                         <div class="initials" id="txt-back">VEG</div>
                         <div class="logo-box logo-yog"><img src="yog_logo_white.png" id="img-yog" alt="yog"></div>
                     </div>
                 </div>
             </div>
+            <div class="hint">Click mat to flip!!</div>
         </div>
-        <div class="controls"><label>3-LETTER INITIALS</label><input type="text" id="initial-input" maxlength="3" value="VEG" inputmode="latin"><label>COLOR PALETTE</label><div id="palette" class="grid"></div></div>
+        <div class="controls">
+            <label>3-LETTER INITIALS (A-Z ONLY)</label>
+            <input type="text" id="initial-input" maxlength="3" value="VEG" inputmode="latin">
+            <label>COLOR PALETTE</label>
+            <div id="palette" class="grid"></div>
+        </div>
         <footer>© YOG Inc.</footer>
     </div>
     <script>
@@ -98,8 +114,7 @@
                 input.value = input.value.replace(/[^a-zA-Z]/g, '').toUpperCase().slice(0, 3);
                 tf.textContent = input.value; tb.textContent = input.value;
             };
-            // 2) 初期カラーをレモンイエロー(Index 1)に設定
-            updateColor(colors[1]);
+            updateColor(colors[1]); // レモンイエロー初期化
         });
     </script>
 </body>
